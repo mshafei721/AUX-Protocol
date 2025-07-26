@@ -47,7 +47,8 @@ class FillFormTool(AUXTool):
                     "default": True
                 }
             },
-            "required": ["form_data"]
+            "required": ["form_data"],
+            "additionalProperties": false
         }
     
     async def execute(self, arguments: Dict[str, Any]) -> List[TextContent]:
@@ -194,6 +195,35 @@ class FillFormTool(AUXTool):
                             return element
             except:
                 pass
+        
+        # Strategy 9: Partial name/id matching (case insensitive)
+        partial_selectors = [
+            f"input[name*='{field_key.lower()}'], select[name*='{field_key.lower()}'], textarea[name*='{field_key.lower()}']",
+            f"input[id*='{field_key.lower()}'], select[id*='{field_key.lower()}'], textarea[id*='{field_key.lower()}']"
+        ]
+        
+        for selector in partial_selectors:
+            elements = await self.adapter.query_elements(QueryCommand(selector=selector))
+            if elements:
+                return elements[0]
+        
+        # Strategy 10: Common field name variations
+        field_variations = [
+            field_key.lower(),
+            field_key.replace('_', ''),
+            field_key.replace('-', ''),
+            field_key.replace(' ', ''),
+            f"user_{field_key.lower()}",
+            f"customer_{field_key.lower()}",
+            f"cust_{field_key.lower()}",
+        ]
+        
+        for variation in field_variations:
+            elements = await self.adapter.query_elements(
+                QueryCommand(selector=f"input[name='{variation}'], input[id='{variation}']")
+            )
+            if elements:
+                return elements[0]
         
         return None
     
@@ -390,7 +420,8 @@ class WaitForElementTool(AUXTool):
                     "description": "How often to check condition in seconds",
                     "default": 0.5
                 }
-            }
+            },
+            "additionalProperties": false
         }
     
     async def execute(self, arguments: Dict[str, Any]) -> List[TextContent]:
@@ -475,7 +506,8 @@ class ExtractDataTool(AUXTool):
                     "default": "json"
                 }
             },
-            "required": ["extraction_rules"]
+            "required": ["extraction_rules"],
+            "additionalProperties": false
         }
     
     async def execute(self, arguments: Dict[str, Any]) -> List[TextContent]:
@@ -634,7 +666,8 @@ class WorkflowTool(AUXTool):
                                 "description": "Optional condition to check before executing step"
                             }
                         },
-                        "required": ["action", "params"]
+                        "required": ["action", "params"],
+                        "additionalProperties": false
                     }
                 },
                 "continue_on_error": {
@@ -643,7 +676,8 @@ class WorkflowTool(AUXTool):
                     "default": False
                 }
             },
-            "required": ["steps"]
+            "required": ["steps"],
+            "additionalProperties": false
         }
     
     async def execute(self, arguments: Dict[str, Any]) -> List[TextContent]:

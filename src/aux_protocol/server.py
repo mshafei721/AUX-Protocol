@@ -111,7 +111,8 @@ async def handle_list_tools() -> List[Tool]:
                         "description": "Run browser in headless mode",
                         "default": False
                     }
-                }
+                },
+                "additionalProperties": False
             }
         ),
         Tool(
@@ -119,7 +120,8 @@ async def handle_list_tools() -> List[Tool]:
             description="Stop browser session",
             inputSchema={
                 "type": "object",
-                "properties": {}
+                "properties": {},
+                "additionalProperties": False
             }
         ),
         # Basic navigation and interaction
@@ -144,7 +146,8 @@ async def handle_list_tools() -> List[Tool]:
                         "default": 10.0
                     }
                 },
-                "required": ["url"]
+                "required": ["url"],
+                "additionalProperties": False
             }
         ),
         Tool(
@@ -167,7 +170,8 @@ async def handle_list_tools() -> List[Tool]:
                         "default": 5.0
                     }
                 },
-                "required": ["element_id"]
+                "required": ["element_id"],
+                "additionalProperties": False
             }
         ),
         Tool(
@@ -195,7 +199,8 @@ async def handle_list_tools() -> List[Tool]:
                         "default": 5.0
                     }
                 },
-                "required": ["element_id", "text"]
+                "required": ["element_id", "text"],
+                "additionalProperties": False
             }
         ),
         Tool(
@@ -222,7 +227,8 @@ async def handle_list_tools() -> List[Tool]:
                         "description": "Maximum number of results",
                         "default": 10
                     }
-                }
+                },
+                "additionalProperties": False
             }
         ),
         Tool(
@@ -230,7 +236,8 @@ async def handle_list_tools() -> List[Tool]:
             description="Get current browser state and all elements",
             inputSchema={
                 "type": "object",
-                "properties": {}
+                "properties": {},
+                "additionalProperties": False
             }
         ),
     ]

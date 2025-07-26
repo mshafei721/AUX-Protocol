@@ -63,16 +63,14 @@ class BrowserAdapter:
         options.add_argument("--ignore-certificate-errors-spki-list")
         options.add_argument("--disable-blink-features=AutomationControlled")
         
-        # Set page load strategy for faster loading
-        options.page_load_strategy = 'eager'  # Don't wait for all resources
-        
-        # Disable logging to reduce overhead
+        # Suppress ChromeDriver version warnings
         options.add_argument("--log-level=3")
+        options.add_argument("--silent")
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
         options.add_experimental_option('useAutomationExtension', False)
         
-        # Set window size for consistent performance
-        options.add_argument("--window-size=1920,1080")
+        # Set page load strategy for faster loading
+        options.page_load_strategy = 'eager'  # Don't wait for all resources
         
         self.driver = webdriver.Chrome(options=options)
         
